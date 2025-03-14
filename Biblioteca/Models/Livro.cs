@@ -10,9 +10,8 @@
         public bool Disponivel { get; set; }
         public int Edicao { get; set; }
 
-        public Livro(int id, string titulo, string autor, string editora, DateOnly anoPublicacao, bool disponivel, int edicao)
+        public Livro(string titulo, string autor, string editora, DateOnly anoPublicacao, bool disponivel, int edicao)
         {
-            this.Id = id;
             this.Titulo = titulo;
             this.Autor = autor;
             this.Editora = editora;

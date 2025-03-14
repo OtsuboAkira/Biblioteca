@@ -1,4 +1,5 @@
 using Biblioteca.Data;
+using Biblioteca.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Biblioteca.Controllers
@@ -23,7 +24,7 @@ namespace Biblioteca.Controllers
             return Ok(livros);
         }
 
-        [HttpGet("GetLivroById")]
+        [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             var livro = _context.Livros.FirstOrDefault(x => x.Id == id);
@@ -33,8 +34,8 @@ namespace Biblioteca.Controllers
             return Ok(livro);
         }
 
-        [HttpGet("GetLivroByTitulo")]
-        public IActionResult Get(string titulo)
+        [HttpGet("GetLivroByTitulo/{titulo}")]
+        public IActionResult GetLivroByTitulo(string titulo)
         {
             var livro = _context.Livros.FirstOrDefault(x => x.Titulo == titulo);
             if (livro == null)
@@ -43,14 +44,26 @@ namespace Biblioteca.Controllers
             return Ok(livro);
         }
 
-        [HttpGet("GetLivroByAutor")]
-        public IActionResult Get(string livros)
+        [HttpGet("GetLivroByAutor/{autor}")]
+        public IActionResult GetlivroByAutor(string autor)
         {
-            var livros = _context.Livros.Where(x => x.Autor == livros.Autor);
-            if (livros == null)
-                return BadRequest($"Não foi possível encontrar os livros de {livros.Autor}");
+            var livrosAutor = _context.Livros.Where(x => x.Autor.ToLower().Contains(autor.ToLower())).ToList();
+            if (livrosAutor == null)
+                return BadRequest($"Não foi possível encontrar os livros de {autor}");
 
-            return Ok(livros);
+            return Ok(livrosAutor);
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] Livro cadastroLivro)
+        {
+            _context.Livros.Add(cadastroLivro);
+            if (cadastroLivro == null)
+                return BadRequest("Falha ao tentar adicionar o livro a biblioteca! Por gentileza revise os dados inseridos");
+
+            _context.SaveChanges();
+
+            return Ok(cadastroLivro);
         }
     }
 }
