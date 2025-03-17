@@ -65,5 +65,49 @@ namespace Biblioteca.Controllers
 
             return Ok(cadastroLivro);
         }
+
+        [HttpPut]
+        public IActionResult Put([FromBody] Livro livro)
+        {
+            var updateLivro = _context.Livros.FirstOrDefault(x => x.Id == livro.Id);
+            if (updateLivro == null)
+                return BadRequest("Não foi possível encontrar o livro solicitado");
+
+            updateLivro.Titulo = livro.Titulo;
+            updateLivro.Autor = livro.Autor;
+            updateLivro.Editora = livro.Editora;
+            updateLivro.AnoPublicacao = livro.AnoPublicacao;
+            updateLivro.Editora = livro.Editora;
+            updateLivro.Disponivel = livro.Disponivel;
+            updateLivro.Edicao = livro.Edicao;
+
+            _context.Livros.Update(updateLivro);
+
+            _context.SaveChanges();
+
+            return Ok(updateLivro);
+        }
+
+        [HttpPut("PutLivroByTitulo")]
+        public IActionResult PutLivroByTitulo([FromBody] Livro livro)
+        {
+            var updateLivro = _context.Livros.FirstOrDefault(x => x.Titulo.ToLower().Contains(livro.Titulo.ToLower()));
+            if (updateLivro == null)
+                return BadRequest($"Não foi possível encontrar o livro {livro.Titulo}");
+
+            updateLivro.Titulo = livro.Titulo;
+            updateLivro.Autor = livro.Autor;
+            updateLivro.Editora = livro.Editora;
+            updateLivro.AnoPublicacao = livro.AnoPublicacao;
+            updateLivro.Editora = livro.Editora;
+            updateLivro.Disponivel = livro.Disponivel;
+            updateLivro.Edicao = livro.Edicao;
+
+            _context.Livros.Update(updateLivro);
+
+            _context.SaveChanges();
+
+            return Ok(updateLivro);
+        }
     }
 }
